@@ -26,8 +26,8 @@ from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, r2_score, make_scorer
 from keras.models import load_model
 
-def ai_qsar_predict(CAS, Species):
-    data = [[CAS, Species]]
+def ai_qsar_predict(data):
+    # data = [[CAS, Species]]
     df = pd.DataFrame(data, columns=['CAS', 'Species'])
 
     # df = pd.read_csv('HL6_one.csv')
@@ -65,14 +65,14 @@ def ai_qsar_predict(CAS, Species):
     X_rdkit_descrs_scal = scaler.fit_transform(X_rdkit_descrs)
     X_rdkit_descrs_scal = pd.DataFrame(X_rdkit_descrs_scal, columns = rdkit_descrs.columns.values.tolist())
 
-    X_rdkit = pd.concat([species_descr, X_rdkit_descrs_scal.reset_index(drop=True)], axis = 1)
-    X_ECFP6 = pd.concat([species_descr, ECFP6_descrs.reset_index(drop=True)], axis = 1)
-    X_FCFP6 = pd.concat([species_descr, FCFP6_descrs.reset_index(drop=True)], axis = 1)
-    X_MACCS = pd.concat([species_descr, MACCS_descrs.reset_index(drop=True)], axis = 1)
+    X_rdkit = pd.concat([X_rdkit_descrs_scal.reset_index(drop=True)], axis = 1)
+    X_ECFP6 = pd.concat([ECFP6_descrs.reset_index(drop=True)], axis = 1)
+    X_FCFP6 = pd.concat([FCFP6_descrs.reset_index(drop=True)], axis = 1)
+    X_MACCS = pd.concat([MACCS_descrs.reset_index(drop=True)], axis = 1)
     All_descr = pd.concat([species_descr, X_rdkit_descrs_scal.reset_index(drop=True), X_ECFP6.reset_index(drop=True), X_FCFP6.reset_index(drop=True), X_MACCS.reset_index(drop=True)], axis = 1)
     # y = df['LambdaZHl']
 
-    best_model_v2 = load_model('best_model.h5')
+    best_model_v2 = load_model('best_model_all.h5')
 
     # X_rdkit = pd.concat([species_descr, X_rdkit_descrs_scal.reset_index(drop=True)], axis = 1)
     # X_ECFP6 = pd.concat([species_descr, ECFP6_descrs.reset_index(drop=True)], axis = 1)
@@ -86,7 +86,7 @@ def ai_qsar_predict(CAS, Species):
 
     y_preds_v2 = best_model_v2.predict(All_descr)
 
-    return y_preds_v2[0, 0]
+    return y_preds_v2
 
 '''
 This script enables automatically connecting to the PubChem database,
