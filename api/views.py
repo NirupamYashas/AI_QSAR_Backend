@@ -37,10 +37,10 @@ def singleinputDatapost(request):
 @api_view(['POST'])
 def fileinputDatapost(request):
     # Check the content length from the request
-    content_length = request._request.META.get('CONTENT_LENGTH', 0)
+    # content_length = request._request.META.get('CONTENT_LENGTH', 0)
 
-    if int(content_length) > MAX_FILE_SIZE:
-        return Response("File size exceeds the maximum limit.", status=400)
+    # if int(content_length) > MAX_FILE_SIZE:
+    #     return Response("File size exceeds the maximum limit.", status=400)
     
     # [{"CAS": "75184-71-3", "Species": "Chicken"},{"CAS": "317-34-0", "Species": "Cattle"}]
     data = []
